@@ -1,6 +1,8 @@
 var x;
 var y;
-let button;
+let intro;
+let firstq;
+let backg;
 let b2 = 62;
 let b3 = 134;
 let b4 = 134;
@@ -9,17 +11,27 @@ let c2 = 240;
 let c3 = 192;
 let c4 = 240;
 var p = 0;
+var t= 0;
+var timerValue = 60;
 let sentence = "Welcome to the Trolley Test. \nHere, we will ask you 3 questions regarding your moral compass. \nAre you ready? \nAre you prepared?\n\n\n\n\n Let's begin.";
 let sentence1 = "There is a runaway trolley barreling down the tracks. \nOn the tracks are 5 people unable to move. You are next to a lever.\nIf you pull, the trolley will switch to a different set of tracks. \nHowever, you notice there is another person on the other track.\n\n\nWhat do you do?";
+let achoice1= "Oh so you're going to sit back and do nothing?\nI guess you're right, the more people that die the better…";
 let scene1 = true;
 let scene2 = false;
 let scene3 = false;
 let scene4 = false;
 
+function preload(){
+  intro = loadSound("cut 1.m4a");
+    firstq = loadSound("cut 2.m4a");
+  backg = loadSound("trolley.mp3");
+  
+}
 function setup() {
   createCanvas(windowWidth, windowHeight);
   x = 0;
   y = 0;
+  setInterval(timeIng, 1000);
 }
 
 function draw() {
@@ -52,9 +64,14 @@ function draw() {
   if (scene2 == true){
     secondScene();
   }
-  if (scene2 == false && scene3 == true){
+  else if (scene2 == false && scene3 == true){
     thirdScene();
     choices();
+    timer();
+  }
+  else if (timerValue == 0 && scene3 == false && scene4 == true){
+    fourthScene();
+    backg.stop();
   }
 }
 
@@ -143,31 +160,82 @@ function thirdScene(){
   textAlign(LEFT, TOP);
   if (scene2 == false){
     
-  text(sentence1.substring(0, p/3), 100, 80);
-  }
+  text(sentence1.substring(0, p/3.8), 100, 80);
   p++;
+    if (timerValue <= 20){
+      text(achoice1.substring(0, t/3.8), 100, 250);
+      t++;
+    }
+  }
+}
+function timer(){
+  textAlign(LEFT, TOP);
+  textSize(70);
+  fill(240, 34, 19);
+  if (scene2 == true){
+    timerValue = 0;
+  }
+  if (scene3 == true && timerValue <= 60 && timerValue >= 10) {
+    text("0:" + timerValue, width/1.3, height/5);
+  }
+  if (timerValue < 10) {
+    text('0:0' + timerValue, width/1.3, height/5);
+  }
+  if (timerValue == 0) {
+      b3 = 252;
+      c1 = 81;
+      c2 = 8;
+      b4 = 134;
+      scene3 = false;
+      scene4 = true;
+      backg.stop();
+  }
 }
 
+function timeIng() {
+  if (timerValue > 0) {
+    timerValue--;
+  }
+}
+function fourthScene(){
+  background(0);
+  textAlign(CENTER);
+  textSize(20);
+  fill(255);
+  if (keyCode == 66){
+    text('Usually we don’t expect testers to kill someone on the first question…\n but we will give you the benefit of the doubt.', width/2, height/2);
+  }
+  else {
+    text('God, that was a lot of blood… You could’ve stopped that, you know.', 400, 400);
+  }
+}
 function mousePressed(){
   if (scene1 == true){
+    backg.play();
     if (mouseX > width/2.4 && mouseX < width/1.8 && mouseY > height/2 && mouseY <height/1.4 ){
       scene2 = true;
+      backg.stop();
+      intro.play();
     }
     else if (mouseX < width && mouseY < height){
+      intro.stop();
+      firstq.play();
+      backg.play();
+      backg.amp(0.35);
       scene2 = false;
       scene3 = true;
     }
   }
 }
-function keyTyped(){
+function keyPressed(){
   if (scene3 == true){
-    if (key == 'a'){
+    if (keyCode == 65){
       b3 = 252;
       c1 = 81;
       c2 = 8;
       b4 = 134;
     }
-    if (key == 'b'){
+    if (keyCode == 66){
       b4 = 252;
       c3 = 81;
       c4 = 8;
