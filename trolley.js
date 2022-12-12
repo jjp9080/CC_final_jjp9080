@@ -1,3 +1,7 @@
+//Judith Park 
+//Final Project
+//The Trolley game: Presented with two impossible choices, but you have to choose one!
+//The narrator is meant to make you feel guilty no matter the choice that you make.
 var x;
 var y;
 let intro;
@@ -20,6 +24,8 @@ let m;
 let img1;
 let img2;
 var timerValue = 100;
+//will try to find a way to put these texts into an array!
+// also wasn't sure if \n is allowed?
 let sentence = "Welcome to the Trolley Test. \nHere, we will ask you 3 questions regarding your moral compass. \nAre you ready? \nAre you prepared?\n\n\n\n\n Let's begin.";
 let sentence1 = "There is a runaway trolley barreling down the tracks. \nOn the tracks are 5 people unable to move. You are next to a lever.\nIf you pull, the trolley will switch to a different set of tracks. \nHowever, you notice there is another person on the other track.\n\nWhat do you do?";
 let achoice1= "Oh so you're going to sit back and do nothing?\nI guess you're right, the more people that die the better…";
@@ -46,6 +52,7 @@ function setup() {
   setInterval(timeIng, 1000);
   n = 10;
   m = 10;
+  //first screen will play christmas music
   christmas.play();
   christmas.amp(0.4);
 }
@@ -59,6 +66,7 @@ function draw() {
     textAlign(CENTER);
     text('The Trolley Problem', width/2, height/2);
     trolley();
+    //makes the trolleys bump into each other
     x = x + 1;
 
     if (x > width/2.3) {
@@ -76,7 +84,7 @@ function draw() {
       }
     }
     firstScene();
-  }
+  }//playing scene by scene
   if (scene2 == true) {
     secondScene();
   } else if (scene2 == false && scene3 == true) {
@@ -88,7 +96,7 @@ function draw() {
     backg.stop();
   }
 }
-
+//drawing the trolley function
 function trolley() {
   stroke(255);
   fill(62, 64, 60);
@@ -120,7 +128,7 @@ function trolley2() {
   ellipse(y+width/2+20, 265, 20, 20);
   ellipse(y+width/2+70, 265, 20, 20);
 }
-
+//this scene is the start menu, the first one 
 function firstScene() {
   strokeWeight(4);
   fill(b2, 64, 60);
@@ -137,6 +145,7 @@ function firstScene() {
     b2 = 62;
   }
 }
+//this is the beginning intro prompt screen
 function secondScene() {
   background(0);
   noStroke();
@@ -148,7 +157,7 @@ function secondScene() {
   textAlign(CENTER);
   text('Click anywhere to begin.', width/2, height/2);
 }
-
+//what the options are and how they are displayed
 function choices() {
   fill(b3, c1, c2);
   strokeWeight(4);
@@ -162,7 +171,7 @@ function choices() {
   text("A. Do nothing", width/6, height/1.85);
   text("B. Pull lever", width/1.7, height/1.85);
 }
-
+//third scene is the actual question
 function thirdScene() {
   background(255);
   fill(0, 42, 255);
@@ -173,11 +182,12 @@ function thirdScene() {
   noStroke();
   textSize(18);
   textAlign(LEFT, TOP);
+  //will print the text slowly
   if (scene2 == false) {
 
     text(sentence1.substring(0, p/3.8), 100, 80);
     p++;
-
+//this prints dialogue for whichever choice you choose
     if (keyCode == 66) {
       text(bchoice2.substring(0, t/3.8), 100, 250);
       t++;
@@ -189,11 +199,13 @@ function thirdScene() {
   }
   strokeWeight(30);
   stroke(14, 105, 0);
+  //this is to print the graphic representation at the bottom
   line(0, height/1.4, width/1.15, height/1.4);
   line(width/1.15, height/1.7, width/1.15, height/1.2);
   noStroke();
   fill(0);
   ellipse(n, m, 40, 40);
+  //this is to move the ellipse across the line
   n += 0.4;
   if (n < width/1.15){
     m = height/1.4;
@@ -201,8 +213,10 @@ function thirdScene() {
   if (n > width/1.15){
     n = width/1.15;
   }
+  //if you press b, the ellipse will move towards the one person
   if (keyCode == 66){
     m += 0.4;
+    // else, the ellipse will move towards the 5 people
   } else {
     m -= 0.4;
   } if (m < height/1.7){
@@ -214,9 +228,14 @@ function thirdScene() {
     m = height/1.2;
     timerValue = 0;
   }
+  //images of the 5 people and one person
   image(img1, width/1.2, height/2.5, 100, 100);
   image(img2, width/1.18, height/1.15, 50, 70);
 }
+//this is to display the big red timer
+//i'm not sure how to start the timer exactly when it gets onto the screen, as it starts when 
+//the user starts the game. for now, I made the duration 100 seconds but I would like to find a way to
+//start it exactly at 60 at the time that the user arrives at the third scene
 function timer() {
   textAlign(LEFT, TOP);
   textSize(70);
@@ -240,12 +259,13 @@ function timer() {
     backg.stop();
   }
 }
-
+//if timer is greater than 0, count down
 function timeIng() {
   if (timerValue > 0) {
     timerValue--;
   }
 }
+//this is the end screen, the narrator guilt tripping you based on the choice you made
 function fourthScene() {
   background(0);
   textAlign(CENTER);
@@ -257,6 +277,8 @@ function fourthScene() {
     text('God, that was a lot of blood… You could’ve stopped that, you know.\n\n People Killed: 5', width/2, height/2);
   }
 }
+
+//mousepressed functions, for the start menu and the second scene
 function mousePressed() {
   if (scene1 == true) {
     if (mouseX > width/2.4 && mouseX < width/1.8 && mouseY > height/2 && mouseY <height/1.4 ) {
@@ -273,6 +295,7 @@ function mousePressed() {
     }
   }
 }
+//keypressed for the a and b options
 function keyPressed() {
   if (scene3 == true) {
     if (keyCode == 65) {
@@ -291,3 +314,7 @@ function keyPressed() {
     }
   }
 }
+//am still working on the other two questions! but they shouldn't be too big of a difference from the question I already have
+// they should pretty much look the same
+// will be putting most of these functions into classes for the final iteration
+// i also have quite a few audio recordings left to incorporate
